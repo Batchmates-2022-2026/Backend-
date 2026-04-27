@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin
+@CrossOrigin(origins = "https://haritbandhu-frontend-git-main-sneha-guptas-projects-df0fd354.vercel.app")
 public class AuthController {
 
     private final UserService userService;

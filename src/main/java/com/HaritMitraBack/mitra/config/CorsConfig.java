@@ -15,7 +15,7 @@ public class CorsConfig {
 
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(
-                "https://haritbandhu-frontend-git-main-sneha-guptas-projects-df0fd354.vercel.app"
+                "https://haritbandhu.netlify.app/"
         ));
 
         config.setAllowedHeaders(List.of("*"));

@@ -1,5 +1,5 @@
 package com.HaritMitraBack.mitra.controller;
-
+import org.springframework.http.ResponseEntity;
 import com.HaritMitraBack.mitra.dto.LoginRequest;
 import com.HaritMitraBack.mitra.dto.SignupRequest;
 import com.HaritMitraBack.mitra.service.ActivityService;

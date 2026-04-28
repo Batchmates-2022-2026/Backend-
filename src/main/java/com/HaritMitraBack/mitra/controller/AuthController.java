@@ -50,7 +50,7 @@ public ResponseEntity<?> login(@RequestBody LoginRequest request) {
     String result = userService.login(request.getEmail(), request.getPassword());
 
     // ❌ LOGIN FAILED CASES
-    if (result.equals("User not found") || result.equals("Invalid password")) {
+    if (result == null || result.starsWith("User") || result.startsWith("Invalid")) {
 
         // 🔥 activity log
         activityService.log(
@@ -67,7 +67,11 @@ public ResponseEntity<?> login(@RequestBody LoginRequest request) {
     // ✅ SUCCESS LOGIN
     String jwt = result;
 
-    String email = null;
+    if (jwt.isBlank()) {
+        return ResponseEntity.status(500).body(Map.of("error","Token generation failed"));
+    }
+
+    String email;
     try {
         email = jwtUtil.extractEmail(jwt);
     } catch (Exception e) {

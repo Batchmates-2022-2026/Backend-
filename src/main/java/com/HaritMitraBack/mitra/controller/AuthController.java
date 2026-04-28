@@ -28,7 +28,7 @@ public class AuthController {
     }
 
     // ✅ SIGNUP
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public Object signup(@Valid @RequestBody SignupRequest request) {
 
         String res = userService.signup(request);

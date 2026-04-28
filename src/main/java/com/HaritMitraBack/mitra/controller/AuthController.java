@@ -50,7 +50,7 @@ public ResponseEntity<?> login(@RequestBody LoginRequest request) {
     String result = userService.login(request.getEmail(), request.getPassword());
 
     // ❌ LOGIN FAILED CASES
-    if (result == null || result.starsWith("User") || result.startsWith("Invalid")) {
+    if (result == null || result.startsWith("User") || result.startsWith("Invalid")) {
 
         // 🔥 activity log
         activityService.log(

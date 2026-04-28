@@ -45,13 +45,18 @@ public class UserService {
         if (userOpt.isEmpty()) return "User not found";
 
         User user = userOpt.get();
+        if(user.getPassword() == null) return "Invalid password";
 
         if (!encoder.matches(password, user.getPassword())) {
             return "Invalid password";
         }
 
         // 🔥 TOKEN GENERATE
-        return jwtUtil.generateToken(user.getEmail(), user.getRole());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+        if(token == null || token.isBlank()){
+            return "Token error";
+        }
+        return token
     }
 
     // 🔥 AUTO ADMIN CREATE

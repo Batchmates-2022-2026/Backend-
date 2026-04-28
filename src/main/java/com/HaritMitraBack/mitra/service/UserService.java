@@ -56,7 +56,7 @@ public class UserService {
         if(token == null || token.isBlank()){
             return "Token error";
         }
-        return token
+        return token;
     }
 
     // 🔥 AUTO ADMIN CREATE

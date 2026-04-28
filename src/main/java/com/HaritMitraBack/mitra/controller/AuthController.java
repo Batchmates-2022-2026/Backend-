@@ -43,40 +43,51 @@ public class AuthController {
         return Map.of("message", res);
     }
 
-    // ✅ LOGIN
-    @PostMapping("/login")
-    public Object login(@RequestBody LoginRequest request) {
+   // ✅ LOGIN
+@PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        String result = userService.login(request.getEmail(), request.getPassword());
+    String result = userService.login(request.getEmail(), request.getPassword());
 
-        // ❌ LOGIN FAILED
-        if (result.startsWith("User") || result.startsWith("Invalid")) {
-
-            activityService.log(
-                    request.getEmail(),
-                    "LOGIN_FAILED",
-                    "Invalid login attempt"
-            );
-
-            return Map.of("error", result);
-        }
-
-        // ✅ SUCCESS LOGIN
-        String jwt = result;
-        String email = jwtUtil.extractEmail(jwt);
+    // ❌ LOGIN FAILED CASES
+    if (result.equals("User not found") || result.equals("Invalid password")) {
 
         // 🔥 activity log
         activityService.log(
-                email,
-                "LOGIN_SUCCESS",
-                "User logged in"
+                request.getEmail(),
+                "LOGIN_FAILED",
+                result
         );
 
-        // 🔥 activity update (VERY IMPORTANT)
-        activityService.updateUserActivity(email);
-
-        return Map.of(
-                "token", jwt
-        );
+        return ResponseEntity.status(401).body(Map.of(
+                "error", result
+        ));
     }
+
+    // ✅ SUCCESS LOGIN
+    String jwt = result;
+
+    String email = null;
+    try {
+        email = jwtUtil.extractEmail(jwt);
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body(Map.of(
+                "error", "Invalid token generated"
+        ));
+    }
+
+    // 🔥 activity log
+    activityService.log(
+            email,
+            "LOGIN_SUCCESS",
+            "User logged in successfully"
+    );
+
+    // 🔥 activity update
+    activityService.updateUserActivity(email);
+
+    return ResponseEntity.ok(Map.of(
+            "token", jwt
+    ));
+}
 }
